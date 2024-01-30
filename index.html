@@ -26,12 +26,12 @@
     </style>
   </head>
   <body onload="getP()">
-    <input type="textbox" id="test" name="PangText-Text" maxlength="524288" placeholder="">
+    <input type="textbox" id="PangText-Text" name="PangText-Text" maxlength="524288" placeholder="">
   </body>
   <script>
     function getP() {
       const urlParams = new URLSearchParams(window.location.search);
-      const box = document.getElementById("test");
+      const box = document.getElementById("PangText-Text");
       let focused = "inset 0 0 0 3px hsla(0, 0%, 0%, 100%)";
       let pattrn = null;
       if (urlParams.has('color')) {
