@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <title>PenguinMod Textbox</title>
+  <head>
+    <style>
+      html, body {
+        background-color: black;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+      }
+      input[type="textbox"] {
+        width: 100vw;
+        height: 100%;
+	min-height: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        font-size: 70vh;
+        border-width: 5vh;
+        padding: 10vh;
+      }
+      :focus {
+        outline: none;
+      }
+    </style>
+  </head>
+  <body onload="getP()">
+    <input type="textbox" id="test" name="PangText-Text" maxlength="524288" placeholder="">
+  </body>
+  <script>
+    function getP() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const box = document.getElementById("test");
+      let focused = "inset 0 0 0 3px hsla(0, 0%, 0%, 100%)";
+      let pattrn = null;
+      if (urlParams.has('color')) {
+        box.style.color = `${urlParams.get('color')}`;
+        box.style.borderColor = `${urlParams.get('color')}`;
+      }
+      if (urlParams.has('bcolor')) {
+        box.style.backgroundColor = `${urlParams.get('bcolor')}`;
+        const rgb = window.getComputedStyle(box).backgroundColor;
+        const colorArr = rgb.slice(rgb.indexOf("(") + 1, rgb.indexOf(")")).split(", "); 
+        const lum = 0.2126*Number(colorArr[0]) + 0.7152*Number(colorArr[1]) + 0.0722*Number(colorArr[2]);
+        if (lum < 154) {
+           focused = "inset 0 0 0 3px hsla(0, 100%, 100%, 100%)";
+        }
+      }
+      if (urlParams.has('font')) {
+        box.style.fontFamily = `${decodeURIComponent(urlParams.get('font'))}`;
+      }
+      if (urlParams.has('placeholder')) {
+        box.setAttribute("placeholder", `${decodeURIComponent(urlParams.get('placeholder'))}`);
+      }
+      if (urlParams.has('italic')) {
+        if (Number(urlParams.get('italic')) == 1) {
+          box.style.fontStyle = "italic";
+        }
+      }
+      if (urlParams.has('bold')) {
+        if (Number(urlParams.get('bold')) == 1) {
+          box.style.fontWeight = "bold";
+        }
+      }
+      if (urlParams.has('case')) {
+        if (Number(urlParams.get('case')) == 1) {
+          box.style.textTransform = "uppercase";
+        } else if (Number(urlParams.get('case')) == 0) {
+          box.style.textTransform = "lowercase";
+        }
+      }
+      if (urlParams.has('max')) {
+        box.setAttribute('maxlength', Number(urlParams.get('max')));
+      }
+      if (urlParams.has('pattern')) {
+        let pstr = decodeURIComponent(urlParams.get('pattern'));
+        if (pstr.startsWith("/") && pstr.endsWith("/")) {
+          pstr = pstr.substring(1, pstr.length - 1);
+        }
+        pattrn = new RegExp(pstr, "");
+      }
+      if (pattrn != null) {
+        box.addEventListener("keypress", event => {
+          if (!pattrn.test(event.key)) {
+              event.preventDefault();
+          }
+        });
+      }
+      box.addEventListener("focus", (e) => {
+        e.target.style.boxShadow = focused;
+      });
+      box.addEventListener("blur", (e) => {
+        e.target.style.boxShadow = "";
+      });
+    }
+  </script>
+</html>
