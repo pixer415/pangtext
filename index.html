@@ -32,7 +32,6 @@
     function getP() {
       const urlParams = new URLSearchParams(window.location.search);
       const box = document.getElementById("test");
-      alert(typeof box);
       let focused = "inset 0 0 0 3px hsla(0, 0%, 0%, 100%)";
       let pattrn = null;
       if (urlParams.has('color')) {
@@ -103,7 +102,7 @@
       }
       box.addEventListener("input", (e) => {
         if (pport !== null) {
-          pport.postMessage("Message back from the IFrame");
+          pport.postMessage(box.value);
         }
       });
     }
