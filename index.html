@@ -109,19 +109,12 @@
       box.addEventListener("keypress", event => {
         if (pattrn !== null && !pattrn.test(event.key)) {
           event.preventDefault();
-        } else {
-          update();
         }
       });
       box.addEventListener("paste", event => {
         if (pattrn !== null && !pattrn.test((event.clipboardData || window.clipboardData).getData("text"))) {
           event.preventDefault();
-        } else {
-          update();
         }
-      });
-      box.addEventListener("cut", event => {
-        update();
       });
       box.addEventListener("input", event => {
         update();
