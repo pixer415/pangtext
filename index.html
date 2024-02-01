@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <title>PenguinMod Textbox</title>
+  <title>turbotex</title>
   <head>
     <style>
       html, body {
@@ -123,13 +123,15 @@
       box.addEventListener("cut", event => {
         update();
       });
+      box.addEventListener("input", event => {
+        update();
+      });
       box.addEventListener("focus", (e) => {
         e.target.style.boxShadow = focused;
       });
       box.addEventListener("blur", (e) => {
         e.target.style.boxShadow = "";
       });
-
       // send initial value to extension
       update();
     }
