@@ -30,10 +30,27 @@
   </body>
   <script>
     function getP() {
+      // setup
       const urlParams = new URLSearchParams(window.location.search);
       const box = document.getElementById("test");
       let focused = "inset 0 0 0 3px hsla(0, 0%, 0%, 100%)";
       let pattrn = null;
+
+      // get port from extension
+      window.addEventListener("message", onMessage);
+      let pport = null;
+      function onMessage(e) {
+        if (e.data === "request") {
+          pport = e.ports[0];
+        }
+      }
+      function update() {
+        if (pport) {
+          pport.postMessage(box.value);
+        }
+      }
+
+      // handle params
       if (urlParams.has('color')) {
         box.style.color = `${urlParams.get('color')}`;
         box.style.borderColor = `${urlParams.get('color')}`;
@@ -44,7 +61,7 @@
         const colorArr = rgb.slice(rgb.indexOf("(") + 1, rgb.indexOf(")")).split(", "); 
         const lum = 0.2126*Number(colorArr[0]) + 0.7152*Number(colorArr[1]) + 0.0722*Number(colorArr[2]);
         if (lum < 154) {
-           focused = "inset 0 0 0 3px hsla(0, 100%, 100%, 100%)";
+           focused = "inset 0 0 0 3vh hsla(0, 100%, 100%, 100%)";
         }
       }
       if (urlParams.has('font')) {
@@ -80,31 +97,41 @@
         }
         pattrn = new RegExp(pstr, "");
       }
-      if (pattrn != null) {
-        box.addEventListener("keypress", event => {
-          if (!pattrn.test(event.key)) {
-              event.preventDefault();
-          }
-        });
+      if (urlParams.has('value')) {
+        const paramValue = `${decodeURIComponent(urlParams.get('value'))}`;
+        if (pattrn === null || pattrn.test(paramValue)) {
+            box.value = paramValue;
+            update();
+        }
       }
+
+      // listeners
+      box.addEventListener("keypress", event => {
+        if (pattrn !== null && !pattrn.test(event.key)) {
+          event.preventDefault();
+        } else {
+          update();
+        }
+      });
+      box.addEventListener("paste", event => {
+        if (pattrn !== null && !pattrn.test((event.clipboardData || window.clipboardData).getData("text"))) {
+          event.preventDefault();
+        } else {
+          update();
+        }
+      });
+      box.addEventListener("cut", event => {
+        update();
+      });
       box.addEventListener("focus", (e) => {
         e.target.style.boxShadow = focused;
       });
       box.addEventListener("blur", (e) => {
         e.target.style.boxShadow = "";
       });
-      window.addEventListener("message", onMessage);
-      let pport = null;
-      function onMessage(e) {
-        if (e.data === "request") {
-          pport = e.ports[0];
-        }
-      }
-      box.addEventListener("input", (e) => {
-        if (pport !== null) {
-          pport.postMessage(box.value);
-        }
-      });
+
+      // send initial value to extension
+      update();
     }
   </script>
 </html>
