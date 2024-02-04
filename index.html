@@ -36,15 +36,6 @@
       let focused = "inset 0 0 0 3px hsla(0, 0%, 0%, 100%)";
       let pattrn = null;
 
-      // get port from extension
-      window.addEventListener("message", onMessage);
-      let pport = null;
-      function onMessage(e) {
-        if (e.data === "request") {
-          pport = e.ports[0];
-        }
-      }
-
       // send updated value to extension
       function update() {
         if (pport) {
@@ -126,9 +117,17 @@
       box.addEventListener("blur", (e) => {
         e.target.style.boxShadow = "";
       });
-	    
-      // send initial value to extension
-      update();
+
+      // get port from extension
+      window.addEventListener("message", onMessage);
+      let pport = null;
+      function onMessage(e) {
+        if (e.data === "request") {
+          pport = e.ports[0];
+	  // send initial value to extension
+          update();
+        }
+      }
     }
   </script>
 </html>
