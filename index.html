@@ -44,6 +44,8 @@
           pport = e.ports[0];
         }
       }
+
+      // send updated value to extension
       function update() {
         if (pport) {
           pport.postMessage(box.value);
@@ -101,10 +103,9 @@
         const paramValue = `${decodeURIComponent(urlParams.get('value'))}`;
         if (pattrn === null || pattrn.test(paramValue)) {
             box.value = paramValue;
-            update();
         }
       }
-
+	    
       // listeners
       box.addEventListener("keypress", event => {
         if (pattrn !== null && !pattrn.test(event.key)) {
@@ -125,7 +126,10 @@
       box.addEventListener("blur", (e) => {
         e.target.style.boxShadow = "";
       });
+	    
       // send initial value to extension
+      while (pport === null) {
+      }
       update();
     }
   </script>
