@@ -99,10 +99,13 @@
       }
 	    
       // listeners
-      box.addEventListener("keypress", event => {
+      box.addEventListener("beforeinput", event => {
         if (pattrn !== null && !pattrn.test(event.key)) {
           event.preventDefault();
         }
+      });
+      box.addEventListener('keyup', event => {
+    	event.target.value = event.target.value.substring(0, box.getAttribute("maxlength"));
       });
       box.addEventListener("paste", event => {
         if (pattrn !== null && !pattrn.test((event.clipboardData || window.clipboardData).getData("text"))) {
