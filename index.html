@@ -26,7 +26,7 @@
     </style>
   </head>
   <body onload="getP()">
-    <input type="textbox" id="test" name="PangText-Text" maxlength="524288" placeholder="">
+    <input type="textbox" id="test" name="turbotex" maxlength="524288" placeholder="">
   </body>
   <script>
     function getP() {
@@ -36,6 +36,7 @@
       let focused = "inset 0 0 0 3px hsla(0, 0%, 0%, 100%)";
       let pattrn = null;
       let pport = null;
+      let lastValue = "";
 
       // send updated value to extension
       function update() {
@@ -99,20 +100,13 @@
       }
 	    
       // listeners
-      box.addEventListener("beforeinput", event => {
-        if (pattrn !== null && !pattrn.test(event.key)) {
-          event.preventDefault();
+      box.addEventListener("input", (e) => {
+	var currentValue = e.target.value.substring(0, box.getAttribute("maxlength"));
+        if (pattrn !== null || !pattrn.test(paramValue)) {
+	    e.target.value = lastValue;
+	} else {
+            lastValue = currentValue;
         }
-      });
-      box.addEventListener('keyup', event => {
-    	event.target.value = event.target.value.substring(0, box.getAttribute("maxlength"));
-      });
-      box.addEventListener("paste", event => {
-        if (pattrn !== null && !pattrn.test((event.clipboardData || window.clipboardData).getData("text"))) {
-          event.preventDefault();
-        }
-      });
-      box.addEventListener("input", event => {
         update();
       });
       box.addEventListener("focus", (e) => {
@@ -121,7 +115,6 @@
       box.addEventListener("blur", (e) => {
         e.target.style.boxShadow = "";
       });
-
       // get port from extension
       window.addEventListener("message", onMessage);
       function onMessage(e) {
