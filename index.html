@@ -96,6 +96,7 @@
         const paramValue = `${decodeURIComponent(urlParams.get('value'))}`;
         if (pattrn === null || pattrn.test(paramValue)) {
             box.value = paramValue;
+	    lastValue = paramValue;
         }
       }
 	    
