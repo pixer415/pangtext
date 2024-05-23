@@ -102,7 +102,7 @@
       }
 	    
       // listeners
-      box.addEventListener("input", (e) => {
+      box.addEventListener("change", (e) => {
 	var currentValue = e.target.value.substring(0, box.getAttribute("maxlength"));
         if (pattrn === null || !pattrn.test(currentValue)) {
 	    e.target.value = lastValue;
