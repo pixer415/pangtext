@@ -105,6 +105,7 @@
       function do_on_input(e) {
         if (e.target.value.length > box.getAttribute("maxlength")) {
             e.target.value = e.target.value.slice(0, box.getAttribute("maxlength"));
+	}
 	if (pattrn !== null && !pattrn.test(e.target.value)) {
 	    e.target.value = lastValue;
 	} else {
