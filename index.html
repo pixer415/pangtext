@@ -105,7 +105,7 @@
       function do_on_input(e) {
         if (e.target.value.length > box.getAttribute("maxlength")) {
             e.target.value = lastValue;
-        else if (pattrn !== null && !pattrn.test(e.target.value)) {
+	} else if (pattrn !== null && !pattrn.test(e.target.value)) {
 	    e.target.value = lastValue;
 	} else {
             lastValue = currentValue;
