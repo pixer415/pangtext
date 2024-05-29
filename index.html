@@ -103,8 +103,9 @@
 	    
       // listeners
       function do_on_input(e) {
-        var currentValue = e.target.value.substring(0, box.getAttribute("maxlength"));
-        if (pattrn !== null && !pattrn.test(currentValue)) {
+        if (e.target.value.length > box.getAttribute("maxlength")) {
+            e.target.value = lastValue;
+        else if (pattrn !== null && !pattrn.test(e.target.value)) {
 	    e.target.value = lastValue;
 	} else {
             lastValue = currentValue;
