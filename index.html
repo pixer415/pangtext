@@ -112,7 +112,7 @@
         update();
       }	      
       box.addEventListener("change", do_on_input);
-      box.addEventListener("keydown", do_on_input);
+      box.addEventListener("input", do_on_input);
       box.addEventListener("focus", (e) => {
         e.target.style.boxShadow = focused;
       });
